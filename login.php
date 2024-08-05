@@ -69,10 +69,11 @@ if (isset($_POST['bLogin'])) {
 	include("koneksi.db.php");
 	$uname=filter_var($_POST['Username'],FILTER_SANITIZE_STRING);
 	$upass=filter_var($_POST['Password'],FILTER_SANITIZE_STRING);
-	$sql="select * from pengguna where username='".$uname."' and password='".$upass."'";
+  $upass_encode=base64_encode($upass);
+	$sql="select * from pengguna where username='".$uname."' and password='".$upass_encode."'";
 	//echo $sql;exit();
 	@$q=mysqli_query($koneksi,$sql);
-	$r=mysqli_fetch_array($q);
+	$r= mysqli_fetch_array($q);
 	if (empty($r)) {
 	echo '<div class="alert alert-danger alert-dismissible">
   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -80,11 +81,16 @@ if (isset($_POST['bLogin'])) {
 </div>'; 
 	}
 	if (!empty($r)) {
-		$_SESSION['SB_u']=$uname;
+    $_TOKEN = base64_encode($uname . $r['idlevel']);
+    $_SESSION['_TOKEN'] = $_TOKEN;
+		//$_SESSION['SB_u']=$uname;
 		//$_SESSION['SB_unit']=$r['unit'];
 		$_SESSION['SB_level']=$r['idlevel'];
     echo "<script>alert('Login Berhasil');</script>";
 		echo "<script>window.location.href='index.php';</script>";
+    // echo $_SESSION['_TOKEN'];
+    // $upass=base64_encode($r['password']);
+    echo $upass;
 	}
   else {
     echo "<script>alert('Login Gagal');</script>";
