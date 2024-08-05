@@ -1,8 +1,9 @@
 <?php 
 if (!isset($_SESSION)) session_start();
-if (empty($_SESSION['SB_u'])) {
+if (empty($_SESSION['_TOKEN'])) {
 echo "<script>alert('Anda Harus Login Terlebih Dahulu');</script>";
 echo "<script>window.location.href='login.php';</script>";
+
 exit();
 }
 ?>
@@ -213,7 +214,7 @@ exit();
                     </div> 
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        <?php echo $_SESSION['SB_u'];?>						
+                        <?php $normal = base64_decode($_SESSION['_TOKEN']); echo $normal;?>						
                     </div>
                 </nav>
             </div> 
